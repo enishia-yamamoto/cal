@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクションフィルム簡易見積</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #1a4d8c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2185d0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #1678c2;
+        }
+        #result {
+            display: none;
+            margin-top: 30px;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .notes {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>プロジェクションフィルム簡易見積</h2>
+        </div>
+
+        <form id="calculatorForm">
+            <div id="inputContainer"></div>
+            <button type="button" onclick="calculate()">簡易見積もりをする</button>
+        </form>
+
+        <div id="result">
+            <div class="header">
+                <h3>プロジェクションフィルム簡易見積結果！</h3>
+            </div>
+            <div class="result-row">
+                <span>フィルム＋施工金額</span>
+                <span id="filmCost">0 円</span>
+            </div>
+            <div class="result-row">
+                <span>必要プロジェクター台数</span>
+                <span id="projectorCount">0 台</span>
+            </div>
+            <div class="result-row">
+                <span>プロジェクター金額</span>
+                <span id="projectorCost">0 円</span>
+            </div>
+            <div class="result-row">
+                <strong>合計金額(税別)</strong>
+                <strong id="totalCost">0 円</strong>
+            </div>
+            <div class="notes">
+                <p>※設置にあたり、別途電気工事代がかかる場合があります。</p>
+                <p>※簡易見積もりは概算価格のため、実際のお見積もりと異なる場合があります。</p>
+            </div>
+            <button type="button" onclick="location.href='#contact'">詳しく相談する</button>
+        </div>
+    </div>
+
+    <script>
+        // 入力フォームの生成
+        const inputContainer = document.getElementById('inputContainer');
+        for (let i = 0; i < 5; i++) {
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+            inputGroup.innerHTML = `
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>縦 (m)</label>
+                        <input type="number" step="0.01" class="vertical" placeholder="1.55">
+                    </div>
+                    <div class="input-field">
+                        <label>横 (m)</label>
+                        <input type="number" step="0.01" class="horizontal" placeholder="1.55">
+                    </div>
+                    <div class="input-field">
+                        <label>枚数</label>
+                        <input type="number" class="sheets" value="1">
+                    </div>
+                </div>
+            `;
+            inputContainer.appendChild(inputGroup);
+        }
+
+        // 価格レンジの定義
+        const priceRanges = [
+            { range: [0, 1], price: 350000 },
+            { range: [1.01, 2], price: 300000 },
+            { range: [2.01, 3], price: 250000 },
+            { range: [3.01, 4], price: 200000 },
+            { range: [4.01, 5], price: 180000 },
+            { range: [5.01, 8], price: 130000 },
+            { range: [8.01, 10], price: 120000 },
+            { range: [10.01, 15], price: 90000 },
+            { range: [15.01, 20], price: 85000 },
+            { range: [20.01, Infinity], price: 80000 }
+        ];
+
+        // プロジェクター要件の定義
+        const projectorRanges = [
+            { range: [0, 13], count: 1, price: 450000 },
+            { range: [13.01, 26], count: 2, price: 900000 },
+            { range: [26.01, 39], count: 3, price: 1350000 },
+            { range: [39.01, 52], count: 4, price: 1800000 },
+            { range: [52.01, 65], count: 5, price: 2250000 }
+        ];
+
+        function calculate() {
+            // 総面積の計算
+            let totalArea = 0;
+            const inputGroups = document.getElementsByClassName('input-group');
+            
+            for (let group of inputGroups) {
+                const vertical = parseFloat(group.querySelector('.vertical').value || 0);
+                const horizontal = parseFloat(group.querySelector('.horizontal').value || 0);
+                const sheets = parseFloat(group.querySelector('.sheets').value || 0);
+                totalArea += vertical * horizontal * sheets;
+            }
+
+            // 適切な価格レンジの検索
+            const priceRange = priceRanges.find(range => 
+                totalArea >= range.range[0] && totalArea <= range.range[1]
+            ) || priceRanges[priceRanges.length - 1];
+
+            // プロジェクター要件の検索
+            const projectorSetup = projectorRanges.find(range =>
+                totalArea >= range.range[0] && totalArea <= range.range[1]
+            ) || projectorRanges[0];
+
+            // 費用の計算
+            const filmCost = Math.round(totalArea * priceRange.price);
+            const projectorCost = projectorSetup.price;
+            const totalCost = filmCost + projectorCost;
+
+            // 結果の表示
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('filmCost').textContent = filmCost.toLocaleString() + ' 円';
+            document.getElementById('projectorCount').textContent = projectorSetup.count + ' 台';
+            document.getElementById('projectorCost').textContent = projectorCost.toLocaleString() + ' 円';
+            document.getElementById('totalCost').textContent = totalCost.toLocaleString() + ' 円';
+        }
+    </script>
+</body>
+</html>
+
