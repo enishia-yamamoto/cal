@@ -169,6 +169,25 @@
     </div>
 
     <script>
+        // 小数点第2位までに制限する関数
+        function formatDecimal(input) {
+            // 数字、小数点、マイナス以外の文字を削除
+            let value = input.value.replace(/[^\d.-]/g, '');
+            
+            // 小数点が複数ある場合、最初の小数点のみ残す
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+
+            // 小数点以下が2桁を超える場合、2桁に切り捨て
+            if (parts.length > 1 && parts[1].length > 2) {
+                value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
+
+            input.value = value;
+        }
+
         // 入力フォームの生成
         const inputContainer = document.getElementById('inputContainer');
         for (let i = 0; i < 5; i++) {
@@ -178,12 +197,12 @@
                 <div class="input-row">
                     <div class="input-field">
                         <label>縦 (m)</label>
-                        <input type="number" step="0.01" class="vertical">
+                        <input type="text" class="vertical" oninput="formatDecimal(this)">
                         <div class="error-text"></div>
                     </div>
                     <div class="input-field">
                         <label>横 (m)</label>
-                        <input type="number" step="0.01" class="horizontal">
+                        <input type="text" class="horizontal" oninput="formatDecimal(this)">
                         <div class="error-text"></div>
                     </div>
                     <div class="input-field">
@@ -256,12 +275,13 @@
                         errorText.textContent = '縦・横の両方を入力してください';
                         isValid = false;
                     }
-                    // 数値チェック
+                    // 数値チェックと小数点第2位までの制限
                     else if (isNaN(vertical) || isNaN(horizontal) || 
-                            parseFloat(vertical) <= 0 || parseFloat(horizontal) <= 0) {
+                            parseFloat(vertical) <= 0 || parseFloat(horizontal) <= 0 ||
+                            !(/^\d*\.?\d{0,2}$/.test(vertical)) || !(/^\d*\.?\d{0,2}$/.test(horizontal))) {
                         verticalInput.classList.add('error-input');
                         horizontalInput.classList.add('error-input');
-                        errorText.textContent = '正しい数値を入力してください';
+                        errorText.textContent = '正しい数値を入力してください（小数点第2位まで）';
                         isValid = false;
                     }
                 }
