@@ -144,11 +144,29 @@
                     </div>
                 </div>
 
-                <!-- 必要最小限の説明文のみ残す -->
-                <div class="input-note">※数字は半角、小数点は「.」で入力ください。</div>
-                
-                <form id="calculatorForm">
-                    <div id="inputContainer"></div>
+            <div class="dimension-note">
+                縦と横の長さをメートル(m)単位で入力してください。
+            </div>
+
+            <form id="calculatorForm">
+                <div class="input-group">
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label>縦 (m)</label>
+                            <input type="text" class="vertical" oninput="formatDecimal(this)">
+                        </div>
+                        <div class="input-field">
+                            <label>横 (m)</label>
+                            <input type="text" class="horizontal" oninput="formatDecimal(this)">
+                        </div>
+                        <div class="input-field">
+                            <label>枚数</label>
+                            <input type="number" class="sheets" value="1" min="1">
+                        </div>
+                    </div>
+                    <div class="decimal-note">※数字は半角、小数点は「.」で入力ください。</div>
+                    <div class="decimal-note">※小数点第2位まで入力可能</div>
+                </div>
                     <button type="button" onclick="calculate()">簡易見積もりをする</button>
                 </form>
             </div>
