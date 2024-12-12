@@ -38,7 +38,6 @@
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 4px;
-            position: relative;
         }
         .input-row {
             display: grid;
@@ -57,6 +56,7 @@
             color: #dc3545;
             font-size: 12px;
             margin-top: 4px;
+            min-height: 18px;
         }
         .error-input {
             border-color: #dc3545 !important;
@@ -71,15 +71,13 @@
         .input-note {
             font-size: 12px;
             color: #666;
+            margin: 5px 0;
+        }
+        .decimal-note {
+            font-size: 12px;
+            color: #666;
             margin-top: 5px;
-        }
-        .dimension-image {
-            margin: 10px 0;
-            text-align: center;
-        }
-        .dimension-image img {
-            max-width: 100%;
-            height: auto;
+            padding-left: 5px;
         }
         button {
             width: 100%;
@@ -97,6 +95,7 @@
         }
         #result {
             display: none;
+            margin-top: 30px;
         }
         .result-box {
             background: #f8f9fa;
@@ -120,11 +119,6 @@
             color: #666;
             line-height: 1.4;
         }
-        .pattern-title {
-            font-size: 14px;
-            color: #333;
-            margin: 10px 0;
-        }
     </style>
 </head>
 <body>
@@ -134,7 +128,7 @@
         </div>
         <div class="content">
             <div class="input-area">
-                <div class="pattern-title">フィルム施工希望範囲の縦と横の長さもメートル(m)単位で入力してください</div>
+                <div class="input-note">フィルム施工希望範囲の縦と横の長さをメートル(m)単位で入力してください。</div>
                 <div class="input-note">※数字は半角、小数点は「.」で入力ください。</div>
                 
                 <form id="calculatorForm">
@@ -184,12 +178,12 @@
                 <div class="input-row">
                     <div class="input-field">
                         <label>縦 (m)</label>
-                        <input type="number" step="0.01" class="vertical" placeholder="1.55">
+                        <input type="number" step="0.01" class="vertical">
                         <div class="error-text"></div>
                     </div>
                     <div class="input-field">
                         <label>横 (m)</label>
-                        <input type="number" step="0.01" class="horizontal" placeholder="1.55">
+                        <input type="number" step="0.01" class="horizontal">
                         <div class="error-text"></div>
                     </div>
                     <div class="input-field">
@@ -198,6 +192,7 @@
                         <div class="error-text"></div>
                     </div>
                 </div>
+                <div class="decimal-note">※小数点第2位まで入力可能（例：1.55）</div>
             `;
             inputContainer.appendChild(inputGroup);
         }
@@ -224,36 +219,60 @@
             { range: [52.01, 65], count: 5, price: 2250000 }
         ];
 
+        // エラー表示をクリア
+        function clearErrors() {
+            document.querySelectorAll('.error-input').forEach(input => {
+                input.classList.remove('error-input');
+            });
+            document.querySelectorAll('.error-text').forEach(error => {
+                error.textContent = '';
+            });
+        }
+
         // 入力値の検証
         function validateInputs() {
+            clearErrors();
             let isValid = true;
-            const inputs = document.querySelectorAll('.input-field input');
+            let hasAnyInput = false;
+
+            const inputGroups = document.getElementsByClassName('input-group');
             
-            inputs.forEach(input => {
-                const value = input.value.trim();
-                const errorText = input.parentElement.querySelector('.error-text');
-                input.classList.remove('error-input');
-                errorText.textContent = '';
-
-                if (value !== '' && (isNaN(value) || value <= 0)) {
-                    input.classList.add('error-input');
-                    errorText.textContent = '正しい数値を入力してください';
-                    isValid = false;
-                }
-
-                // 部分的な入力チェック（縦または横のみ入力されている場合）
-                const group = input.closest('.input-row');
+            for (let group of inputGroups) {
                 const vertical = group.querySelector('.vertical').value.trim();
                 const horizontal = group.querySelector('.horizontal').value.trim();
-                
-                if ((vertical !== '' && horizontal === '') || (vertical === '' && horizontal !== '')) {
-                    group.querySelectorAll('input').forEach(input => {
-                        input.classList.add('error-input');
-                    });
-                    group.querySelector('.error-text').textContent = '縦・横の両方を入力してください';
-                    isValid = false;
+                const sheets = group.querySelector('.sheets').value.trim();
+
+                // 入力が1つでもある場合のチェック
+                if (vertical !== '' || horizontal !== '') {
+                    hasAnyInput = true;
+                    const verticalInput = group.querySelector('.vertical');
+                    const horizontalInput = group.querySelector('.horizontal');
+                    const errorText = group.querySelector('.error-text');
+
+                    // 縦横どちらかが未入力
+                    if (vertical === '' || horizontal === '') {
+                        verticalInput.classList.add('error-input');
+                        horizontalInput.classList.add('error-input');
+                        errorText.textContent = '縦・横の両方を入力してください';
+                        isValid = false;
+                    }
+                    // 数値チェック
+                    else if (isNaN(vertical) || isNaN(horizontal) || 
+                            parseFloat(vertical) <= 0 || parseFloat(horizontal) <= 0) {
+                        verticalInput.classList.add('error-input');
+                        horizontalInput.classList.add('error-input');
+                        errorText.textContent = '正しい数値を入力してください';
+                        isValid = false;
+                    }
                 }
-            });
+            }
+
+            if (!hasAnyInput) {
+                const firstGroup = inputGroups[0];
+                const errorText = firstGroup.querySelector('.error-text');
+                errorText.textContent = '少なくとも1つの寸法を入力してください';
+                isValid = false;
+            }
 
             return isValid;
         }
@@ -274,6 +293,17 @@
                 if (vertical > 0 && horizontal > 0 && sheets > 0) {
                     totalArea += vertical * horizontal * sheets;
                 }
+            }
+
+            // 合計面積が0の場合は全て0円で表示
+            if (totalArea === 0) {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('filmCost').textContent = '0 円';
+                document.getElementById('projectorCount').textContent = '0 台';
+                document.getElementById('projectorCost').textContent = '0 円';
+                document.getElementById('totalCost').textContent = '0 円';
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+                return;
             }
 
             // 適切な価格レンジの検索
@@ -301,13 +331,6 @@
             // 結果までスクロール
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
-
-        // 入力イベントのリスナーを追加
-        document.querySelectorAll('.input-field input').forEach(input => {
-            input.addEventListener('input', function() {
-                validateInputs();
-            });
-        });
     </script>
 </body>
 </html>
