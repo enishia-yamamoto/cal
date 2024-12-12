@@ -12,10 +12,9 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             background: white;
-            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -24,7 +23,14 @@
             color: white;
             padding: 15px;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 8px 8px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+        }
+        .input-area {
             margin-bottom: 20px;
         }
         .input-group {
@@ -32,20 +38,28 @@
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 4px;
+            position: relative;
         }
         .input-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-bottom: 10px;
         }
         .input-field {
-            margin-bottom: 10px;
+            position: relative;
         }
         label {
             display: block;
             margin-bottom: 5px;
             font-size: 14px;
+        }
+        .error-text {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .error-input {
+            border-color: #dc3545 !important;
         }
         input {
             width: 100%;
@@ -53,6 +67,19 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
+        }
+        .input-note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .dimension-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .dimension-image img {
+            max-width: 100%;
+            height: auto;
         }
         button {
             width: 100%;
@@ -62,14 +89,20 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
         }
         button:hover {
             background-color: #1678c2;
         }
         #result {
             display: none;
-            margin-top: 30px;
+        }
+        .result-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
         }
         .result-row {
             display: flex;
@@ -77,49 +110,67 @@
             padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
+        .result-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+        }
         .notes {
             margin-top: 15px;
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
+            line-height: 1.4;
+        }
+        .pattern-title {
+            font-size: 14px;
+            color: #333;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h2>プロジェクションフィルム簡易見積</h2>
+            プロジェクションフィルム簡易見積
         </div>
+        <div class="content">
+            <div class="input-area">
+                <div class="pattern-title">フィルム施工希望範囲の縦と横の長さもメートル(m)単位で入力してください</div>
+                <div class="input-note">※数字は半角、小数点は「.」で入力ください。</div>
+                
+                <form id="calculatorForm">
+                    <div id="inputContainer"></div>
+                    <button type="button" onclick="calculate()">簡易見積もりをする</button>
+                </form>
+            </div>
 
-        <form id="calculatorForm">
-            <div id="inputContainer"></div>
-            <button type="button" onclick="calculate()">簡易見積もりをする</button>
-        </form>
-
-        <div id="result">
-            <div class="header">
-                <h3>プロジェクションフィルム簡易見積結果！</h3>
+            <div id="result">
+                <div class="header">
+                    プロジェクションフィルム簡易見積結果！
+                </div>
+                <div class="result-box">
+                    <div class="result-row">
+                        <span>フィルム＋施工金額</span>
+                        <span id="filmCost">0 円</span>
+                    </div>
+                    <div class="result-row">
+                        <span>必要プロジェクター台数</span>
+                        <span id="projectorCount">0 台</span>
+                    </div>
+                    <div class="result-row">
+                        <span>プロジェクター金額</span>
+                        <span id="projectorCost">0 円</span>
+                    </div>
+                    <div class="result-row">
+                        <span>合計金額(税別)</span>
+                        <span id="totalCost">0 円</span>
+                    </div>
+                </div>
+                <div class="notes">
+                    <p>※設置にあたり、別途電気工事代がかかる場合があります。</p>
+                    <p>※簡易見積もりは概算価格のため、実際のお見積もりと異なる場合があります。</p>
+                </div>
+                <button type="button" onclick="location.href='#contact'">詳しく相談する</button>
             </div>
-            <div class="result-row">
-                <span>フィルム＋施工金額</span>
-                <span id="filmCost">0 円</span>
-            </div>
-            <div class="result-row">
-                <span>必要プロジェクター台数</span>
-                <span id="projectorCount">0 台</span>
-            </div>
-            <div class="result-row">
-                <span>プロジェクター金額</span>
-                <span id="projectorCost">0 円</span>
-            </div>
-            <div class="result-row">
-                <strong>合計金額(税別)</strong>
-                <strong id="totalCost">0 円</strong>
-            </div>
-            <div class="notes">
-                <p>※設置にあたり、別途電気工事代がかかる場合があります。</p>
-                <p>※簡易見積もりは概算価格のため、実際のお見積もりと異なる場合があります。</p>
-            </div>
-            <button type="button" onclick="location.href='#contact'">詳しく相談する</button>
         </div>
     </div>
 
@@ -134,14 +185,17 @@
                     <div class="input-field">
                         <label>縦 (m)</label>
                         <input type="number" step="0.01" class="vertical" placeholder="1.55">
+                        <div class="error-text"></div>
                     </div>
                     <div class="input-field">
                         <label>横 (m)</label>
                         <input type="number" step="0.01" class="horizontal" placeholder="1.55">
+                        <div class="error-text"></div>
                     </div>
                     <div class="input-field">
                         <label>枚数</label>
-                        <input type="number" class="sheets" value="1">
+                        <input type="number" class="sheets" value="1" min="1">
+                        <div class="error-text"></div>
                     </div>
                 </div>
             `;
@@ -162,7 +216,6 @@
             { range: [20.01, Infinity], price: 80000 }
         ];
 
-        // プロジェクター要件の定義
         const projectorRanges = [
             { range: [0, 13], count: 1, price: 450000 },
             { range: [13.01, 26], count: 2, price: 900000 },
@@ -171,7 +224,45 @@
             { range: [52.01, 65], count: 5, price: 2250000 }
         ];
 
+        // 入力値の検証
+        function validateInputs() {
+            let isValid = true;
+            const inputs = document.querySelectorAll('.input-field input');
+            
+            inputs.forEach(input => {
+                const value = input.value.trim();
+                const errorText = input.parentElement.querySelector('.error-text');
+                input.classList.remove('error-input');
+                errorText.textContent = '';
+
+                if (value !== '' && (isNaN(value) || value <= 0)) {
+                    input.classList.add('error-input');
+                    errorText.textContent = '正しい数値を入力してください';
+                    isValid = false;
+                }
+
+                // 部分的な入力チェック（縦または横のみ入力されている場合）
+                const group = input.closest('.input-row');
+                const vertical = group.querySelector('.vertical').value.trim();
+                const horizontal = group.querySelector('.horizontal').value.trim();
+                
+                if ((vertical !== '' && horizontal === '') || (vertical === '' && horizontal !== '')) {
+                    group.querySelectorAll('input').forEach(input => {
+                        input.classList.add('error-input');
+                    });
+                    group.querySelector('.error-text').textContent = '縦・横の両方を入力してください';
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
         function calculate() {
+            if (!validateInputs()) {
+                return;
+            }
+
             // 総面積の計算
             let totalArea = 0;
             const inputGroups = document.getElementsByClassName('input-group');
@@ -180,7 +271,9 @@
                 const vertical = parseFloat(group.querySelector('.vertical').value || 0);
                 const horizontal = parseFloat(group.querySelector('.horizontal').value || 0);
                 const sheets = parseFloat(group.querySelector('.sheets').value || 0);
-                totalArea += vertical * horizontal * sheets;
+                if (vertical > 0 && horizontal > 0 && sheets > 0) {
+                    totalArea += vertical * horizontal * sheets;
+                }
             }
 
             // 適切な価格レンジの検索
@@ -204,8 +297,17 @@
             document.getElementById('projectorCount').textContent = projectorSetup.count + ' 台';
             document.getElementById('projectorCost').textContent = projectorCost.toLocaleString() + ' 円';
             document.getElementById('totalCost').textContent = totalCost.toLocaleString() + ' 円';
+
+            // 結果までスクロール
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
+
+        // 入力イベントのリスナーを追加
+        document.querySelectorAll('.input-field input').forEach(input => {
+            input.addEventListener('input', function() {
+                validateInputs();
+            });
+        });
     </script>
 </body>
 </html>
-
