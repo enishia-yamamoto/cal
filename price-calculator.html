@@ -337,44 +337,63 @@
             return isValid;
         }
 
-        function calculate() {
-            if (!validateInputs()) {
-                return;
-            }
+function calculate() {
+    if (!validateInputs()) {
+        return;
+    }
 
-            // 総面積の計算
-            let totalArea = 0;
-            const inputGroups = document.getElementsByClassName('input-group');
+    // 総面積の計算とプロジェクター台数の計算
+    let totalArea = 0;
+    let totalProjectors = 0;
+    const inputGroups = document.getElementsByClassName('input-group');
+    
+    for (let group of inputGroups) {
+        const vertical = parseFloat(group.querySelector('.vertical').value || 0);
+        const horizontal = parseFloat(group.querySelector('.horizontal').value || 0);
+        const sheets = parseFloat(group.querySelector('.sheets').value || 0);
+        
+        if (vertical > 0 && horizontal > 0 && sheets > 0) {
+            const areaPerPattern = vertical * horizontal;
+            totalArea += areaPerPattern * sheets;
             
-            for (let group of inputGroups) {
-                const vertical = parseFloat(group.querySelector('.vertical').value || 0);
-                const horizontal = parseFloat(group.querySelector('.horizontal').value || 0);
-                const sheets = parseFloat(group.querySelector('.sheets').value || 0);
-                if (vertical > 0 && horizontal > 0 && sheets > 0) {
-                    totalArea += vertical * horizontal * sheets;
-                }
-            }
-
-            // 合計面積が0の場合は全て0円で表示
-            if (totalArea === 0) {
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('filmCost').textContent = '0 円';
-                document.getElementById('projectorCount').textContent = '0 台';
-                document.getElementById('projectorCost').textContent = '0 円';
-                document.getElementById('totalCost').textContent = '0 円';
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-
-            // 適切な価格レンジの検索
-            const priceRange = priceRanges.find(range => 
-                totalArea >= range.range[0] && totalArea <= range.range[1]
-            ) || priceRanges[priceRanges.length - 1];
-
-            // プロジェクター要件の検索
+            // 各パターンごとのプロジェクター台数を計算
             const projectorSetup = projectorRanges.find(range =>
-                totalArea >= range.range[0] && totalArea <= range.range[1]
+                areaPerPattern >= range.range[0] && areaPerPattern <= range.range[1]
             ) || projectorRanges[0];
+            
+            totalProjectors += projectorSetup.count * sheets;
+        }
+    }
 
-            // 費用の計算
-            const filmCost = Math.round(totalArea * priceRange.
+    // 合計面積が0の場合は全て0円で表示
+    if (totalArea === 0) {
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('filmCost').textContent = '0 円';
+        document.getElementById('projectorCount').textContent = '0 台';
+        document.getElementById('projectorCost').textContent = '0 円';
+        document.getElementById('totalCost').textContent = '0 円';
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+
+    // フィルム価格レンジの検索
+    const priceRange = priceRanges.find(range => 
+        totalArea >= range.range[0] && totalArea <= range.range[1]
+    ) || priceRanges[priceRanges.length - 1];
+
+    // 費用の計算
+    const filmCost = Math.round(totalArea * priceRange.price);
+    const projectorCost = 450000 * totalProjectors; // 1台あたり450,000円で計算
+
+    const totalCost = filmCost + projectorCost;
+
+    // 結果の表示
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('filmCost').textContent = filmCost.toLocaleString() + ' 円';
+    document.getElementById('projectorCount').textContent = totalProjectors + ' 台';
+    document.getElementById('projectorCost').textContent = projectorCost.toLocaleString() + ' 円';
+    document.getElementById('totalCost').textContent = totalCost.toLocaleString() + ' 円';
+
+    // 結果までスクロール
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+}
