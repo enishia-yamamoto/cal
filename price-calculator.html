@@ -130,6 +130,11 @@
             display: block;
             margin: 0 auto;
         }
+        .center-text {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+        }
 
     </style>
 </head>
@@ -140,20 +145,15 @@
         </div>
         <div class="content">
             <div class="input-area">
-                <!-- ここに画像を追加 -->
                 <div class="sample-image-container">
                     <img src="https://enishia-yamamoto.github.io/cal/cap.png" alt="プロジェクションフィルム施工イメージ" class="sample-image">
-                    </dev>
-                    <div class="dimension-markers">
-
-                        <div class="measure-icon">
-                            縦と横の長さパターンごとに入力ください。
-                        </div>
+                    <div class="triangle-container">
+                        <div class="triangle"></div>
                     </div>
                 </div>
-
-                <!-- 必要最小限の説明文のみ残す -->
-                <div class="input-note">※数字は半角、小数点は「.」で入力ください。</div>
+        
+                <div class="center-text">縦と横の長さパターンごとに入力ください。</div>
+                <div class="center-text">※数字は半角、小数点は「.」で入力ください。</div>
                 
                 <form id="calculatorForm">
                     <div id="inputContainer"></div>
@@ -163,7 +163,7 @@
 
             <div id="result">
                 <div class="header">
-                    プロジェクションフィルム簡易見積結果！
+                    プロジェクションフィルム</br>簡易見積結果！
                 </div>
                 <div class="arrow-container top-arrow-container">
                 <div class="arrow"></div>
