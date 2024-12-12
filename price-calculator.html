@@ -234,13 +234,26 @@
                     </div>
                     <div class="input-field">
                         <label>枚数</label>
-                        <input type="number" class="sheets" value="1" min="1">
+                        <input type="number" class="sheets" value="1" min="1" onchange="validateSheets(this)" onkeyup="validateSheets(this)" step="1">
                         <div class="error-text"></div>
                     </div>
                 </div>
                 <div class="decimal-note">※小数点第2位まで入力可能</div>
             `;
             inputContainer.appendChild(inputGroup);
+        }
+       // 枚数のバリデーション関数を追加
+        function validateSheets(input) {
+            const value = input.value;
+            // 小数点や負の数を整数に変換
+            const intValue = Math.max(1, Math.floor(Number(value)));
+            if (intValue !== Number(value)) {
+                input.value = intValue;
+            }
+            // 空欄の場合は1にする
+            if (value === '') {
+                input.value = 1;
+            }
         }
 
         // 価格レンジの定義
