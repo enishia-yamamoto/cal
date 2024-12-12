@@ -122,15 +122,34 @@
         .sample-image-container {
             text-align: center;
             margin-bottom: 20px;
+            position: relative;
         }
-        
         .sample-image {
             max-width: 100%;
             height: auto;
             display: block;
             margin: 0 auto;
         }
-
+        /* 三角形の矢印用スタイル */
+        .triangle-container {
+            position: relative;
+            height: 40px;
+            margin: -1px auto 0;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-top: 30px solid #f5f5f5;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
     </style>
 </head>
 <body>
@@ -140,19 +159,16 @@
         </div>
         <div class="content">
             <div class="input-area">
-                <!-- ここに画像を追加 -->
                 <div class="sample-image-container">
                     <img src="https://enishia-yamamoto.github.io/cal/cap.png" alt="プロジェクションフィルム施工イメージ" class="sample-image">
-                    </dev>
-                    <div class="dimension-markers">
-
-                        <div class="measure-icon">
-                            縦と横の長さパターンごとに入力ください。
-                        </div>
+                    <div class="triangle-container">
+                        <div class="triangle"></div>
                     </div>
                 </div>
 
-                <!-- 必要最小限の説明文のみ残す -->
+                <div class="dimension-note">
+                    縦と横の長さをメートル(m)単位で入力してください。
+                </div>
                 <div class="input-note">※数字は半角、小数点は「.」で入力ください。</div>
                 
                 <form id="calculatorForm">
@@ -163,12 +179,9 @@
 
             <div id="result">
                 <div class="header">
-                    プロジェクションフィルム簡易見積結果！
+                    プロジェクションフィルム<br>簡易見積結果！
                 </div>
-                <div class="arrow-container top-arrow-container">
-                <div class="arrow"></div>
-            </div>
-            <div class="result-box">
+                <div class="result-box">
                     <div class="result-row">
                         <span>フィルム＋施工金額</span>
                         <span id="filmCost">0 円</span>
@@ -364,20 +377,4 @@
             ) || projectorRanges[0];
 
             // 費用の計算
-            const filmCost = Math.round(totalArea * priceRange.price);
-            const projectorCost = projectorSetup.price;
-            const totalCost = filmCost + projectorCost;
-
-            // 結果の表示
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('filmCost').textContent = filmCost.toLocaleString() + ' 円';
-            document.getElementById('projectorCount').textContent = projectorSetup.count + ' 台';
-            document.getElementById('projectorCost').textContent = projectorCost.toLocaleString() + ' 円';
-            document.getElementById('totalCost').textContent = totalCost.toLocaleString() + ' 円';
-
-            // 結果までスクロール
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
-</body>
-</html>
+            const filmCost = Math.round(totalArea * priceRange.
