@@ -119,17 +119,6 @@
             color: #666;
             line-height: 1.4;
         }
-        .sample-image-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .sample-image {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
     </style>
 </head>
 <body>
@@ -140,10 +129,15 @@
         <div class="content">
             <div class="input-area">
                 <!-- ここに画像を追加 -->
-<div class="sample-image-container">
-    <img src="https://enishia-yamamoto.github.io/cal/cap.png" alt="プロジェクションフィルム施工イメージ" class="sample-image">
-</div>
-
+                <div class="sample-image-container">
+                    <img src="https://enishia-yamamoto.github.io/cal/cap.png" alt="プロジェクションフィルム施工イメージ" class="sample-image">
+                    <div class="dimension-markers">
+                        <div class="vertical-marker">
+                            <span class="marker-label vertical-label">縦</span>
+                        </div>
+                        <div class="horizontal-marker">
+                            <span class="marker-label horizontal-label">横</span>
+                        </div>
                         <div class="measure-icon">
                             フィルム施工希望範囲の<br>縦と横の長さをメートル(m)<br>単位で入力してください
                         </div>
@@ -218,7 +212,7 @@
         for (let i = 0; i < 5; i++) {
             const inputGroup = document.createElement('div');
             inputGroup.className = 'input-group';
-            inputGroup.innerHTML = 
+            inputGroup.innerHTML = `
                 <div class="input-row">
                     <div class="input-field">
                         <label>縦 (m)</label>
@@ -237,7 +231,7 @@
                     </div>
                 </div>
                 <div class="decimal-note">※小数点第2位まで入力可能</div>
-            ;
+            `;
             inputContainer.appendChild(inputGroup);
         }
 
