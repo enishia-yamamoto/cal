@@ -1,0 +1,169 @@
+/* Scss Document */
+.modal_wrap input {
+  display: none; }
+
+.modal_wrap_v02 .modal_content {
+  padding-top: 140px; }
+
+@media screen and (max-width: 599px) {
+  .modal_wrap_v02 .modal_content {
+    padding-top: 70px; } }
+.modal_overlay {
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  opacity: 0;
+  transition: opacity 0.5s, transform 0s 0.5s;
+  transform: scale(0); }
+
+.modal_trigger {
+  position: absolute;
+  width: 100%;
+  height: 100%; }
+
+.modal_content {
+  align-self: flex-start;
+  width: 100%;
+  padding: 50px 0;
+  box-sizing: border-box;
+  line-height: 1.4em;
+  transform: translateY(-100%);
+  transition: 0.5s; }
+  .modal_content .modal_in {
+    width: 100%;
+    margin: 0 auto; }
+
+.close_button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  background: #646464;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99; }
+  .close_button i {
+    line-height: 1;
+    color: #fff; }
+
+.modal_wrap input:checked ~ .modal_overlay {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s; }
+
+.modal_wrap input:checked ~ .modal_overlay .modal_content {
+  transform: translateY(0px); }
+
+.open_button {
+  cursor: pointer; }
+
+#taisaku_ct {
+  width: 96%;
+  max-width: 1100px;
+  margin: 60px auto; }
+
+#taisaku_ct h2 {
+  color: #0093cf;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center; }
+
+#modal_list_btn {
+  width: 90%;
+  max-width: 700px;
+  margin: 60px auto; }
+
+#modal_list_btn li {
+  margin: 20px 0; }
+
+#modal_list_btn li a {
+  display: block;
+  background: #fff;
+  border: 2px solid #db251e;
+  padding: 18px 0 20px 0;
+  border-radius: 20px;
+  color: #db251e;
+  text-align: center;
+  line-height: 1.4;
+  font-weight: bold;
+  font-size: 2rem;
+  position: relative; }
+
+#modal_list_btn li a span {
+  font-size: 2.4rem;
+  margin-right: 0.5em; }
+
+#modal_list_btn li:nth-child(2) a {
+  border: 2px solid #02b902;
+  color: #02b902; }
+
+#modal_list_btn li a i {
+  color: #db251e;
+  position: absolute;
+  right: 2%;
+  top: 50%;
+  font-size: 1.4rem;
+  margin-top: -1.1rem; }
+
+#modal_list_btn li:nth-child(2) a i {
+  color: #02b902; }
+
+@media screen and (min-width: 640px) {
+  .modal_wrap input:checked ~ .modal_overlay .modal_content {
+    transform: translateY(0%); }
+
+  .modal_content {
+    position: absolute;
+    top: 0px;
+    padding: 0; }
+
+  .close_button {
+    top: 30px;
+    right: 30px;
+    font-size: 30px;
+    -webkit-transition: 0.2s ease-in-out;
+    -moz-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out; }
+    .close_button:hover {
+      background: #000; }
+
+  .clinics_modal .close_button {
+    -webkit-transition: 0.2s ease-in-out;
+    -moz-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out; }
+    .clinics_modal .close_button:hover {
+      background: #000; }
+
+  #modal_list_btn {
+    margin-top: 150px; }
+
+  #modal_list_btn li a:hover {
+    background: #db251e;
+    color: #fff; }
+
+  #modal_list_btn li:nth-child(2) a:hover {
+    background: #02b902; }
+
+  #modal_list_btn li a:hover i {
+    color: #fff; }
+
+  #taisaku_ct {
+    margin: 40px auto; } }
+@media all and (-ms-high-contrast: none) {
+  .modal_overlay {
+    overflow: hidden; } }
