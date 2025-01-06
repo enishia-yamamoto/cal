@@ -1,0 +1,60 @@
+@charset "UTF-8";
+/* CSS Document */
+.scroll_event{
+	overflow: hidden;
+}
+.scroll_event .in_ct{
+	transition: 1.5s;
+}
+
+.f_up_list{
+	opacity: 0;
+	transform: translate(0,50px); 
+	-webkit-transform: translate(0,50px); 
+}
+.f_up{
+	opacity: 1.0;
+	transform: translate(0,0); 
+	-webkit-transform: translate(0,0);
+}
+
+.f_down_list{
+	opacity: 0;
+	transform: translate(0,-50px); 
+	-webkit-transform: translate(0,-50px); 
+}
+.f_down{
+	opacity: 1.0;
+	transform: translate(0,0); 
+	-webkit-transform: translate(0,0);
+}
+
+.f_list_left{
+	opacity: 0;
+	transform: translate(-50px,0); 
+	-webkit-transform: translate(-50px,0); 
+}
+.f_left{
+	opacity: 1.0;
+	transform: translate(0,0); 
+	-webkit-transform: translate(0,0);
+}
+
+.f_list_right{
+	opacity: 0;
+	transform: translate(50px,0); 
+	-webkit-transform: translate(50px,0); 
+}
+.f_right{
+	opacity: 1.0;
+	transform: translate(0,0); 
+	-webkit-transform: translate(0,0);
+}
+.f_list_in{
+	opacity: 0;
+}
+.f_in{
+	opacity: 1.0;
+}
+
+
