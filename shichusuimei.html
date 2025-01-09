@@ -179,6 +179,7 @@
                 // Google Apps Script Webhook URLに送信
                 const response = await fetch('https://script.google.com/macros/s/AKfycbxuI8C0UjjIegdYPvFU6nNdcS2sC1y5zFynfWaqmr3T0IoByRdQw8GD7bb_GdzyxLYP/exec', {
                     method: 'POST',
+   		    mode: 'no-cors', // このオプションを追加
                     headers: {
                         'Content-Type': 'application/json',
                     },
