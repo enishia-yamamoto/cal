@@ -103,18 +103,58 @@
     </form>
 
     <script>
-        // LIFF初期化
-        liff.init({ liffId: "2006754892-2nlQpZO3" })
-            .then(() => {
+        // LIFF初期化と既存データ読み込み
+        async function initializeLiff() {
+            try {
+                await liff.init({ liffId: "2006754892-2nlQpZO3" });
                 if (!liff.isLoggedIn()) {
                     liff.login();
+                } else {
+                    // ログイン済みの場合、既存データを読み込む
+                    const userProfile = await liff.getProfile();
+                    await loadExistingData(userProfile.userId);
                 }
-            })
-            .catch((err) => {
-                console.error('LIFF初期化エラー', err);
-            });
+            } catch (error) {
+                console.error('LIFF initialization failed', error);
+                alert('LINEアプリの初期化に失敗しました');
+            }
+        }
 
-        // 年の選択肢を生成（1970年から現在まで）
+        // 既存データの読み込み関数
+        async function loadExistingData(userId) {
+            try {
+                const response = await fetch(`https://script.google.com/macros/s/AKfycbxuI8C0UjjIegdYPvFU6nNdcS2sC1y5zFynfWaqmr3T0IoByRdQw8GD7bb_GdzyxLYP/exec?userId=${userId}`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    throw new Error('データの取得に失敗しました');
+                }
+
+                const data = await response.json();
+                if (data && data.userData) {
+                    // フォームに値を設定
+                    const { year, month, day, hour, minute, gender } = data.userData;
+                    
+                    if (year) document.getElementById('year').value = year;
+                    if (month) document.getElementById('month').value = month;
+                    if (day) document.getElementById('day').value = day;
+                    if (hour) document.getElementById('hour').value = hour;
+                    if (minute) document.getElementById('minute').value = minute;
+                    if (gender) {
+                        const genderInput = document.querySelector(`input[value="${gender}"]`);
+                        if (genderInput) genderInput.checked = true;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading existing data:', error);
+            }
+        }
+
+        initializeLiff();
+
+        // 年の選択肢を生成
         const yearSelect = document.getElementById('year');
         const currentYear = new Date().getFullYear();
         for (let year = 1970; year <= currentYear; year++) {
@@ -182,10 +222,14 @@
                         userId: userProfile.userId,
                         data: data
                     }),
-                    mode: 'no-cors'
+                    mode: 'cors'
                 });
 
-                await liff.closeWindow();
+                if (!response.ok) {
+                    throw new Error('送信に失敗しました');
+                }
+
+                liff.closeWindow();
 
             } catch (error) {
                 console.error('Error:', error);
