@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>四柱推命占い</title>
-    <!-- LIFF SDK の読み込み -->
+    <!-- LIFF SDK -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         body {
@@ -28,6 +28,7 @@
         select {
             padding: 3px;
             margin-right: 3px;
+            font-size: 16px;
         }
         .unit {
             margin-right: 10px;
@@ -48,7 +49,7 @@
             width: 100%;
             max-width: 200px;
             margin: 30px auto;
-            padding: 10px;
+            padding: 12px;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -59,7 +60,7 @@
         #loading {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -87,7 +88,7 @@
             <label>性別</label>
             <div class="radio-group">
                 <div class="radio-option">
-                    <input type="radio" name="gender" value="male" id="male">
+                    <input type="radio" name="gender" value="male" id="male" required>
                     <label for="male">男性</label>
                 </div>
                 <div class="radio-option">
@@ -98,24 +99,20 @@
         </div>
 
         <button type="submit">鑑定する</button>
+        <div id="loading">送信中...</div>
     </form>
-    <div id="loading">送信中...</div>
 
     <script>
         // LIFF初期化
-        async function initializeLiff() {
-            try {
-                await liff.init({ liffId: "2006754892-2nlQpZO3" });
+        liff.init({ liffId: "2006754892-2nlQpZO3" })
+            .then(() => {
                 if (!liff.isLoggedIn()) {
                     liff.login();
                 }
-            } catch (error) {
-                console.error('LIFF initialization failed', error);
-                alert('LINEアプリの初期化に失敗しました');
-            }
-        }
-
-        initializeLiff();
+            })
+            .catch((err) => {
+                console.error('LIFF初期化エラー', err);
+            });
 
         // 年の選択肢を生成（1970年から現在まで）
         const yearSelect = document.getElementById('year');
@@ -166,46 +163,36 @@
         }
 
         // フォームの送信処理
-document.getElementById('fortuneForm').onsubmit = async function(e) {
-    e.preventDefault();
-    const loadingDiv = document.getElementById('loading');
-    if (loadingDiv) loadingDiv.style.display = 'block';
+        document.getElementById('fortuneForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.style.display = 'block';
 
-    try {
-        // LIFFの初期化確認
-        if (!liff.isLoggedIn()) {
-            await liff.login();
-        }
+            try {
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                const userProfile = await liff.getProfile();
+                
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxuI8C0UjjIegdYPvFU6nNdcS2sC1y5zFynfWaqmr3T0IoByRdQw8GD7bb_GdzyxLYP/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: userProfile.userId,
+                        data: data
+                    }),
+                    mode: 'no-cors'
+                });
 
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        const userProfile = await liff.getProfile();
-        
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxuI8C0UjjIegdYPvFU6nNdcS2sC1y5zFynfWaqmr3T0IoByRdQw8GD7bb_GdzyxLYP/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userProfile.userId,
-                data: data
-            }),
-            mode: 'cors' // CORSモードを明示的に指定
-        });
+                await liff.closeWindow();
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // 成功時の処理
-        liff.closeWindow();
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('エラーが発生しました: ' + error.message);
-    } finally {
-        if (loadingDiv) loadingDiv.style.display = 'none';
-    }
-};    </script>
+            } catch (error) {
+                console.error('Error:', error);
+                alert('エラーが発生しました: ' + error.message);
+                loadingDiv.style.display = 'none';
+            }
+        };
+    </script>
 </body>
 </html>
