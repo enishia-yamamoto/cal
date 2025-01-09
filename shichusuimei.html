@@ -109,16 +109,74 @@
         // JSONP コールバック関数
         function handleUserData(data) {
             if (data && data.userData) {
-                const { year, month, day, hour, minute, gender } = data.userData;
-                if (year) document.getElementById('year').value = year;
-                if (month) document.getElementById('month').value = month;
-                if (day) document.getElementById('day').value = day;
-                if (hour && hour !== 'unknown') document.getElementById('hour').value = hour;
-                if (minute && minute !== 'unknown') document.getElementById('minute').value = minute;
-                if (gender) {
-                    const genderInput = document.querySelector(`input[value="${gender}"]`);
-                    if (genderInput) genderInput.checked = true;
-                }
+                // キャッシュに保存
+                localStorage.setItem('userData', JSON.stringify(data.userData));
+                applyUserData(data.userData);
+            }
+        }
+
+        // データを適用する関数
+        function applyUserData(userData) {
+            const { year, month, day, hour, minute, gender } = userData;
+            if (year) document.getElementById('year').value = year;
+            if (month) document.getElementById('month').value = month;
+            if (day) document.getElementById('day').value = day;
+            if (hour && hour !== 'unknown') document.getElementById('hour').value = hour;
+            if (minute && minute !== 'unknown') document.getElementById('minute').value = minute;
+            if (gender) {
+                const genderInput = document.querySelector(`input[value="${gender}"]`);
+                if (genderInput) genderInput.checked = true;
+            }
+        }
+
+        // フォームの初期化
+        function initializeForm() {
+            // 年の選択肢を生成
+            const yearSelect = document.getElementById('year');
+            const currentYear = new Date().getFullYear();
+            for (let year = 1970; year <= currentYear; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+
+            // 月の選択肢を生成
+            const monthSelect = document.getElementById('month');
+            for (let month = 1; month <= 12; month++) {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = month;
+                if (month === 1) option.selected = true;
+                monthSelect.appendChild(option);
+            }
+
+            // 日の選択肢を生成
+            const daySelect = document.getElementById('day');
+            for (let day = 1; day <= 31; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day;
+                if (day === 1) option.selected = true;
+                daySelect.appendChild(option);
+            }
+
+            // 時の選択肢を生成
+            const hourSelect = document.getElementById('hour');
+            for (let hour = 0; hour <= 23; hour++) {
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = hour;
+                hourSelect.appendChild(option);
+            }
+
+            // 分の選択肢を生成
+            const minuteSelect = document.getElementById('minute');
+            for (let minute = 0; minute <= 59; minute++) {
+                const option = document.createElement('option');
+                option.value = minute;
+                option.textContent = minute.toString().padStart(2, '0');
+                minuteSelect.appendChild(option);
             }
         }
 
@@ -129,6 +187,13 @@
                 if (!liff.isLoggedIn()) {
                     liff.login();
                 } else {
+                    // キャッシュをチェック
+                    const cachedData = localStorage.getItem('userData');
+                    if (cachedData) {
+                        applyUserData(JSON.parse(cachedData));
+                    }
+                    
+                    // バックグラウンドで最新データを取得
                     const userProfile = await liff.getProfile();
                     loadExistingData(userProfile.userId);
                 }
@@ -138,62 +203,20 @@
             }
         }
 
-        // JSONP を使用してデータを読み込む
+        // データ読み込み関数
         function loadExistingData(userId) {
             const script = document.createElement('script');
             script.src = `https://script.google.com/macros/s/AKfycbxuI8C0UjjIegdYPvFU6nNdcS2sC1y5zFynfWaqmr3T0IoByRdQw8GD7bb_GdzyxLYP/exec?userId=${userId}&callback=handleUserData`;
             document.body.appendChild(script);
         }
 
-        initializeLiff();
-
-        // 年の選択肢を生成（1970年から現在まで）
-        const yearSelect = document.getElementById('year');
-        const currentYear = new Date().getFullYear();
-        for (let year = 1970; year <= currentYear; year++) {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            yearSelect.appendChild(option);
+        // 初期化実行
+        function initialize() {
+            initializeForm();
+            initializeLiff();
         }
 
-        // 月の選択肢を生成
-        const monthSelect = document.getElementById('month');
-        for (let month = 1; month <= 12; month++) {
-            const option = document.createElement('option');
-            option.value = month;
-            option.textContent = month;
-            if (month === 1) option.selected = true;
-            monthSelect.appendChild(option);
-        }
-
-        // 日の選択肢を生成
-        const daySelect = document.getElementById('day');
-        for (let day = 1; day <= 31; day++) {
-            const option = document.createElement('option');
-            option.value = day;
-            option.textContent = day;
-            if (day === 1) option.selected = true;
-            daySelect.appendChild(option);
-        }
-
-        // 時の選択肢を生成
-        const hourSelect = document.getElementById('hour');
-        for (let hour = 0; hour <= 23; hour++) {
-            const option = document.createElement('option');
-            option.value = hour;
-            option.textContent = hour;
-            hourSelect.appendChild(option);
-        }
-
-        // 分の選択肢を生成
-        const minuteSelect = document.getElementById('minute');
-        for (let minute = 0; minute <= 59; minute++) {
-            const option = document.createElement('option');
-            option.value = minute;
-            option.textContent = minute.toString().padStart(2, '0');
-            minuteSelect.appendChild(option);
-        }
+        initialize();
 
         // フォームの送信処理
         document.getElementById('fortuneForm').onsubmit = async function(e) {
@@ -222,6 +245,9 @@
                     mode: 'no-cors'
                 });
 
+                // キャッシュを更新
+                localStorage.setItem('userData', JSON.stringify(data));
+                
                 liff.closeWindow();
 
             } catch (error) {
