@@ -500,10 +500,10 @@
             for (let i = 0; i < inputGroups.length; i++) {
                 const group = inputGroups[i];
                 data.inputs.push({
-                    vertical: group.querySelector('.vertical').value || '',
-                    horizontal: group.querySelector('.horizontal').value || '',
+                    vertical: group.querySelector('.vertical').value || '0',    // 空の場合は'0'を設定
+                    horizontal: group.querySelector('.horizontal').value || '0', // 空の場合は'0'を設定
                     sheets: group.querySelector('.sheets').value || '0',
-                    area: group.querySelector('.area-result .area-value').textContent.replace(/[^\d.]/g, '')
+                    area: group.querySelector('.area-result .area-value').textContent.replace(/[^\d.]/g, '') || '0'
                 });
             }
 
@@ -511,7 +511,7 @@
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = 'https://script.google.com/macros/s/AKfycbwFZdmWaoXalhlOKU7ua-f8Qr-bfeYJZQtGWLek2NF-Xs4gyk_x2cRePHjln-XT2jX2Pg/exec';
-            form.target = 'hidden_iframe'; // 非表示のiframeをターゲットに
+            form.target = 'hidden_iframe';
 
             const input = document.createElement('input');
             input.type = 'hidden';
