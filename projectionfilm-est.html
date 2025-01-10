@@ -507,26 +507,26 @@
                 });
             }
 
-            // GASのWebアプリケーションURLに送信
-            fetch('https://script.google.com/macros/s/AKfycbwFZdmWaoXalhlOKU7ua-f8Qr-bfeYJZQtGWLek2NF-Xs4gyk_x2cRePHjln-XT2jX2Pg/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    alert('データが正常に保存されました');
-                } else {
-                    alert('データの保存中にエラーが発生しました');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('エラーが発生しました');
-            });
+            // フォームを使用してデータを送信
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'あなたのGASのWebアプリケーションURL';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'data';
+            input.value = JSON.stringify(data);
+            
+            form.appendChild(input);
+            document.body.appendChild(form);
+            
+            form.submit();
+
+            // 送信完了メッセージを表示
+            setTimeout(() => {
+                alert('データが送信されました');
+                document.body.removeChild(form);
+            }, 1000);
         }
 
         // Generate initial input forms
