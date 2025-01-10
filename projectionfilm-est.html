@@ -486,49 +486,52 @@
         }
 
         function sendToGAS() {
-            const inputGroups = document.getElementsByClassName('input-group');
-            const data = {
-                inputs: [],
-                projectorCount: document.getElementById('projectorCount').value,
-                filmCost: document.getElementById('filmCost').textContent.replace(/[^\d]/g, ''),
-                totalArea: document.getElementById('totalArea').textContent.replace(/[^\d.]/g, ''),
-                projectorCost: document.getElementById('projectorCost').textContent.replace(/[^\d]/g, ''),
-                totalCost: document.getElementById('totalCost').textContent.replace(/[^\d]/g, '')
-            };
+    const inputGroups = document.getElementsByClassName('input-group');
+    const data = {
+        inputs: [],
+        projectorCount: document.getElementById('projectorCount').value,
+        filmCost: document.getElementById('filmCost').textContent.replace(/[^\d]/g, ''),
+        totalArea: document.getElementById('totalArea').textContent.replace(/[^\d.]/g, ''),
+        projectorCost: document.getElementById('projectorCost').textContent.replace(/[^\d]/g, ''),
+        totalCost: document.getElementById('totalCost').textContent.replace(/[^\d]/g, '')
+    };
 
-            // 各入力欄のデータを収集
-            for (let i = 0; i < inputGroups.length; i++) {
-                const group = inputGroups[i];
-                data.inputs.push({
-                    vertical: group.querySelector('.vertical').value || '',
-                    horizontal: group.querySelector('.horizontal').value || '',
-                    sheets: group.querySelector('.sheets').value || '0',
-                    area: group.querySelector('.area-result .area-value').textContent.replace(/[^\d.]/g, '')
-                });
-            }
+    // 各入力欄のデータを収集
+    for (let i = 0; i < inputGroups.length; i++) {
+        const group = inputGroups[i];
+        data.inputs.push({
+            vertical: group.querySelector('.vertical').value || '',
+            horizontal: group.querySelector('.horizontal').value || '',
+            sheets: group.querySelector('.sheets').value || '0',
+            area: group.querySelector('.area-result .area-value').textContent.replace(/[^\d.]/g, '')
+        });
+    }
 
-            // フォームを使用してデータを送信
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://script.google.com/macros/s/AKfycbwFZdmWaoXalhlOKU7ua-f8Qr-bfeYJZQtGWLek2NF-Xs4gyk_x2cRePHjln-XT2jX2Pg/exec';
+    // データの内容をコンソールに出力（デバッグ用）
+    console.log('Sending data:', data);
 
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'data';
-            input.value = JSON.stringify(data);
-            
-            form.appendChild(input);
-            document.body.appendChild(form);
-            
-            form.submit();
+    // フォームを使用してデータを送信
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://script.google.com/macros/s/AKfycbwFZdmWaoXalhlOKU7ua-f8Qr-bfeYJZQtGWLek2NF-Xs4gyk_x2cRePHjln-XT2jX2Pg/exec';
+    form.target = '_blank'; // 結果を新しいタブで開く（デバッグ用）
 
-            // 送信完了メッセージを表示
-            setTimeout(() => {
-                alert('データが送信されました');
-                document.body.removeChild(form);
-            }, 1000);
-        }
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = JSON.stringify(data);
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    
+    // フォーム送信
+    form.submit();
 
+    // フォームを削除
+    setTimeout(() => {
+        document.body.removeChild(form);
+    }, 1000);
+}
         // Generate initial input forms
         const inputContainer = document.getElementById('inputContainer');
         for (let i = 0; i < 5; i++) {
