@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクションフィルム簡易見積</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #1a4d8c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+        }
+        .input-area {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            position: relative;
+        }
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            position: relative;
+            min-height: 85px;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            position: relative;
+        }
+        .error-text {
+            color: #dc3545;
+            font-size: 12px;
+            position: absolute;
+            bottom: -32px;
+            left: 0;
+            white-space: nowrap;
+            width: auto;
+            min-width: 100%;
+            visibility: hidden;
+            height: 0;
+        }
+        .error-text:not(:empty) {
+            visibility: visible;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .error-input {
+            border-color: #dc3545 !important;
+            border-width: 2px;
+        }
+        .decimal-note {
+            font-size: 12px;
+            color: #666;
+            margin: -25px 0 5px 0;
+            padding-left: 5px;
+            position: relative;
+        }
+        .error-input ~ .decimal-note,
+        .error-text:not(:empty) ~ .decimal-note {
+            margin-top: -15px;
+        }
+        .input-group-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a4d8c;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-size: 14px;
+            height: 39px;
+        }
+        select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px;
+        }
+        select:focus {
+            outline: none;
+            border-color: #2185d0;
+        }
+        .unit-symbol {
+            font-size: 18px;
+            vertical-align: middle;
+            line-height: 1;
+            display: inline-block;
+        }
+        .input-note {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2185d0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1678c2;
+        }
+        #result {
+            display: none;
+            margin-top: 30px;
+        }
+        .result-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+        }
+        .notes {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+        .sample-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sample-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .center-text {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .area-result {
+            font-size: 14px;
+            color: #1a4d8c;
+            margin-top: 20px;
+            padding: 8px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .area-label, .area-value {
+            display: block;
+        }
+        .area-value {
+            text-align: right;
+            min-width: 100px;
+        }
+        .projector-row {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .projector-note {
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .highlight {
+            background: linear-gradient(transparent 60%, #ffff66 60%);
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .large-text {
+            font-size: 20px;
+        }
+        select.error-input {
+            border-color: #dc3545 !important;
+            border-width: 2px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc3545' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            プロジェクションフィルム<br>簡易見積
+        </div>
+        <div class="content">
+            <div class="input-area">
+                <div class="sample-image-container">
+                    <img src="/projectionfilm-pic.png" alt="プロジェクションフィルム施工イメージ" class="sample-image">
+                </div>
+        
+                <div class="center-text">縦と横の長さパターンごとに入力ください。</div>
+                <div class="center-text">数字は半角、小数点は「.」で入力ください。</div>
+                
+                <form id="calculatorForm">
+                    <div id="inputContainer"></div>
+                    
+                    <div class="projector-row">
+                        <div class="projector-note">
+                            プロジェクションフィルムの<span class="highlight">面積が<strong class="bold large-text">13㎡</strong>ごと</span>に、<span class="highlight">プロジェクター1台</span>が必要です。<br>
+                            プロジェクターが必要な方は購入希望数量を以下に選択下さい。<br>
+                            プロジェクターをお持ちの方は「0」のままお進みください。
+                        </div>
+                        <div class="input-field">
+                            <label>必要プロジェクター台数</label>
+                            <select id="projectorCount">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="calculate()">簡易見積もりする</button>
+                </form>
+            </div>
+            <div id="result">
+                <div class="header">
+                    プロジェクションフィルム</br>簡易見積結果！
+                </div>
+                <div class="result-box">
+                    <div class="result-row">
+                        <span>フィルム＋施工金額</span>
+                        <span id="filmCost">0 円</span>
+                    </div>
+                    <div class="result-row">
+                        <span>施工範囲の総面積</span>
+                        <span id="totalArea">0 <span class="unit-symbol">㎡</span></span>
+                    </div>
+                    <div class="result-row">
+                        <span>プロジェクター金額</span>
+                        <span id="projectorCost">0 円</span>
+                    </div>
+                    <div class="result-row">
+                        <span>合計金額(税別)</span>
+                        <span id="totalCost">0 円</span>
+                    </div>
+                </div>
+                <div class="notes">
+                    <p>※設置にあたり、別途電気工事代がかかる場合があります。</p>
+                    <p>※簡易見積もりは概算価格のため、実際のお見積もりと異なる場合があります。</p>
+                </div>
+                <button type="button" onclick="window.location.href='https://liff.line.me/2006684513-DB6Azl1B?unique_key=NGGXye&ts=1736311258'">詳しく相談する</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function calculateAreaForGroup(group) {
+            const vertical = parseFloat(group.querySelector('.vertical').value || 0);
+            const horizontal = parseFloat(group.querySelector('.horizontal').value || 0);
+            const sheets = parseInt(group.querySelector('.sheets').value || 0);
+            
+            if (vertical > 0 && horizontal > 0 && sheets > 0) {
+                return (vertical * horizontal * sheets).toFixed(2);
+            }
+            return "0.00";
+        }
+
+        function updateAreaDisplay(group) {
+            const areaValue = group.querySelector('.area-result .area-value');
+            const area = calculateAreaForGroup(group);
+            areaValue.innerHTML = area + ' <span class="unit-symbol">㎡</span>';
+        }
+
+        function formatDecimal(input) {
+            let value = input.value.replace(/[^\d.-]/g, '');
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            if (parts.length > 1 && parts[1].length > 2) {
+                value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
+            input.value = value;
+            
+            const group = input.closest('.input-group');
+            updateAreaDisplay(group);
+        }
+
+        function updateArea(select) {
+            const group = select.closest('.input-group');
+            updateAreaDisplay(group);
+        }
+
+        // 価格レンジの定義
+        const priceRanges = [
+            { range: [0, 1], price: 350000 },
+            { range: [1.01, 2], price: 300000 },
+            { range: [2.01, 3], price: 250000 },
+            { range: [3.01, 4], price: 200000 },
+            { range: [4.01, 5], price: 180000 },
+            { range: [5.01, 8], price: 130000 },
+            { range: [8.01, 10], price: 120000 },
+            { range: [10.01, 15], price: 90000 },
+            { range: [15.01, 20], price: 85000 },
+            { range: [20.01, Infinity], price: 80000 }
+        ];
+
+        function clearErrors() {
+            document.querySelectorAll('.error-input').forEach(input => {
+                input.classList.remove('error-input');
+            });
+            document.querySelectorAll('.error-text').forEach(error => {
+                error.textContent = '';
+            });
+        }
+
+        function validateInputs() {
+            clearErrors();
+            let isValid = true;
+            let hasAnyInput = false;
+            let hasNonZeroSheets = false;
+
+            const inputGroups = document.getElementsByClassName('input-group');
+            
+            for (let group of inputGroups) {
+                const vertical = group.querySelector('.vertical').value.trim();
+                const horizontal = group.querySelector('.horizontal').value.trim();
+                const sheets = parseInt(group.querySelector('.sheets').value || 0);
+
+                if (vertical !== '' || horizontal !== '') {
+                    hasAnyInput = true;
+                    const verticalInput = group.querySelector('.vertical');
+                    const horizontalInput = group.querySelector('.horizontal');
+                    const sheetsSelect = group.querySelector('.sheets');
+                    const errorText = group.querySelector('.error-text');
+
+                    // 縦横の入力チェック
+                    if (vertical === '' || horizontal === '') {
+                        verticalInput.classList.add('error-input');
+                        horizontalInput.classList.add('error-input');
+                        errorText.textContent = '縦・横の両方を入力してください';
+                        isValid = false;
+                    }
+                    else if (isNaN(vertical) || isNaN(horizontal) || 
+                            parseFloat(vertical) <= 0 || parseFloat(horizontal) <= 0 ||
+                            !(/^\d*\.?\d{0,2}$/.test(vertical)) || !(/^\d*\.?\d{0,2}$/.test(horizontal))) {
+                        verticalInput.classList.add('error-input');
+                        horizontalInput.classList.add('error-input');
+                        errorText.textContent = '正の数を入力してください';
+                        isValid = false;
+                    }
+                    
+                    // 枚数チェック
+                    if (sheets > 0) {
+                        hasNonZeroSheets = true;
+                    }
+                }
+            }
+
+            if (!hasAnyInput) {
+                const firstGroup = inputGroups[0];
+                const errorText = firstGroup.querySelector('.error-text');
+                errorText.textContent = '少なくとも1つの寸法を入力してください';
+                isValid = false;
+            }
+
+            // 全ての入力欄で枚数が0の場合のチェック
+            if (hasAnyInput && !hasNonZeroSheets) {
+                for (let group of inputGroups) {
+                    const vertical = group.querySelector('.vertical').value.trim();
+                    const horizontal = group.querySelector('.horizontal').value.trim();
+                    
+                    if (vertical !== '' || horizontal !== '') {
+                        const sheetsSelect = group.querySelector('.sheets');
+                        const errorText = group.querySelector('.error-text');
+                        sheetsSelect.classList.add('error-input');
+                        errorText.textContent = '少なくとも1つの入力欄で枚数を選択してください';
+                        isValid = false;
+                    }
+                }
+            }
+
+            return isValid;
+        }
+
+        function calculate() {
+            if (!validateInputs()) {
+                return;
+            }
+
+            let totalArea = 0;
+            const inputGroups = document.getElementsByClassName('input-group');
+            
+            for (let group of inputGroups) {
+                const area = parseFloat(calculateAreaForGroup(group));
+                totalArea += area;
+            }
+
+            if (totalArea === 0) {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('filmCost').textContent = '0 円';
+                document.getElementById('totalArea').innerHTML = '0.00 <span class="unit-symbol">㎡</span>';
+                document.getElementById('projectorCost').textContent = '0 円';
+                document.getElementById('totalCost').textContent = '0 円';
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const priceRange = priceRanges.find(range => 
+                totalArea >= range.range[0] && totalArea <= range.range[1]
+            ) || priceRanges[priceRanges.length - 1];
+
+            const filmCost = Math.round(totalArea * priceRange.price);
+            const projectorCount = parseInt(document.getElementById('projectorCount').value) || 0;
+            const projectorCost = 450000 * projectorCount;
+            const totalCost = filmCost + projectorCost;
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('filmCost').textContent = filmCost.toLocaleString() + ' 円';
+            document.getElementById('totalArea').innerHTML = totalArea.toFixed(2) + ' <span class="unit-symbol">㎡</span>';
+            document.getElementById('projectorCost').textContent = projectorCost.toLocaleString() + ' 円';
+            document.getElementById('totalCost').textContent = totalCost.toLocaleString() + ' 円';
+
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            
+            // GASにデータを送信
+            sendToGAS();
+        }
+
+        function sendToGAS() {
+            const inputGroups = document.getElementsByClassName('input-group');
+            const data = {
+                inputs: [],
+                projectorCount: document.getElementById('projectorCount').value,
+                filmCost: document.getElementById('filmCost').textContent.replace(/[^\d]/g, ''),
+                totalArea: document.getElementById('totalArea').textContent.replace(/[^\d.]/g, ''),
+                projectorCost: document.getElementById('projectorCost').textContent.replace(/[^\d]/g, ''),
+                totalCost: document.getElementById('totalCost').textContent.replace(/[^\d]/g, '')
+            };
+
+            // 各入力欄のデータを収集
+            for (let i = 0; i < inputGroups.length; i++) {
+                const group = inputGroups[i];
+                data.inputs.push({
+                    vertical: group.querySelector('.vertical').value || '',
+                    horizontal: group.querySelector('.horizontal').value || '',
+                    sheets: group.querySelector('.sheets').value || '0',
+                    area: group.querySelector('.area-result .area-value').textContent.replace(/[^\d.]/g, '')
+                });
+            }
+
+            // GASのWebアプリケーションURLに送信
+            fetch('https://script.google.com/macros/s/AKfycbwFZdmWaoXalhlOKU7ua-f8Qr-bfeYJZQtGWLek2NF-Xs4gyk_x2cRePHjln-XT2jX2Pg/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('データが正常に保存されました');
+                } else {
+                    alert('データの保存中にエラーが発生しました');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('エラーが発生しました');
+            });
+        }
+
+        // Generate initial input forms
+        const inputContainer = document.getElementById('inputContainer');
+        for (let i = 0; i < 5; i++) {
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+            inputGroup.innerHTML = `
+                <div class="input-group-label">入力欄${i + 1}</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>縦 (m)</label>
+                        <input type="text" class="vertical" oninput="formatDecimal(this)">
+                        <div class="error-text"></div>
+                    </div>
+                    <div class="input-field">
+                        <label>横 (m)</label>
+                        <input type="text" class="horizontal" oninput="formatDecimal(this)">
+                        <div class="error-text"></div>
+                    </div>
+                    <div class="input-field">
+                        <label>枚数</label>
+                        <select class="sheets" onchange="updateArea(this)">
+                            <option value="0">0</option>
+                            ${Array.from({length: 15}, (_, i) => i + 1)
+                                .map(num => `<option value="${num}">${num}</option>`)
+                                .join('')}
+                        </select>
+                        <div class="error-text"></div>
+                    </div>
+                </div>
+                <div class="decimal-note">※小数点第2位まで入力可能</div>
+                <div class="area-result">
+                    <div class="area-label">施工範囲の面積</div>
+                    <div class="area-value">0.00 <span class="unit-symbol">㎡</span></div>
+                </div>
+            `;
+            inputContainer.appendChild(inputGroup);
+        }
+    </script>
+</body>
+</html>
