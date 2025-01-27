@@ -82,9 +82,6 @@
             <select name="hour" id="hour">
                 <option value="unknown">不明</option>
             </select><span class="unit">時</span>
-            <select name="minute" id="minute">
-                <option value="unknown">不明</option>
-            </select><span class="unit">分</span>
         </div>
 
         <div class="form-group">
@@ -117,12 +114,11 @@
 
         // データを適用する関数
         function applyUserData(userData) {
-            const { year, month, day, hour, minute, gender } = userData;
+            const { year, month, day, hour, gender } = userData;
             if (year) document.getElementById('year').value = year;
             if (month) document.getElementById('month').value = month;
             if (day) document.getElementById('day').value = day;
             if (hour && hour !== 'unknown') document.getElementById('hour').value = hour;
-            if (minute && minute !== 'unknown') document.getElementById('minute').value = minute;
             if (gender) {
                 const genderInput = document.querySelector(`input[value="${gender}"]`);
                 if (genderInput) genderInput.checked = true;
@@ -168,15 +164,6 @@
                 option.value = hour;
                 option.textContent = hour;
                 hourSelect.appendChild(option);
-            }
-
-            // 分の選択肢を生成
-            const minuteSelect = document.getElementById('minute');
-            for (let minute = 0; minute <= 59; minute++) {
-                const option = document.createElement('option');
-                option.value = minute;
-                option.textContent = minute.toString().padStart(2, '0');
-                minuteSelect.appendChild(option);
             }
         }
 
