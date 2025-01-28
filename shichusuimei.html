@@ -78,13 +78,6 @@
         </div>
 
         <div class="form-group">
-            <label>出生時間</label>
-            <select name="hour" id="hour">
-                <option value="unknown">不明</option>
-            </select><span class="unit">時</span>
-        </div>
-
-        <div class="form-group">
             <label>性別</label>
             <div class="radio-group">
                 <div class="radio-option">
@@ -114,11 +107,10 @@
 
         // データを適用する関数
         function applyUserData(userData) {
-            const { year, month, day, hour, gender } = userData;
+            const { year, month, day, gender } = userData;
             if (year) document.getElementById('year').value = year;
             if (month) document.getElementById('month').value = month;
             if (day) document.getElementById('day').value = day;
-            if (hour && hour !== 'unknown') document.getElementById('hour').value = hour;
             if (gender) {
                 const genderInput = document.querySelector(`input[value="${gender}"]`);
                 if (genderInput) genderInput.checked = true;
@@ -155,15 +147,6 @@
                 option.textContent = day;
                 if (day === 1) option.selected = true;
                 daySelect.appendChild(option);
-            }
-
-            // 時の選択肢を生成
-            const hourSelect = document.getElementById('hour');
-            for (let hour = 0; hour <= 23; hour++) {
-                const option = document.createElement('option');
-                option.value = hour;
-                option.textContent = hour;
-                hourSelect.appendChild(option);
             }
         }
 
