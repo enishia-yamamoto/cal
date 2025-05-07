@@ -11,8 +11,7 @@
   </style>
 </head>
 <body>
-  <h1>LINEログイン</h1>
-  <button id="loginButton">LINEでログイン</button>
+  <h1>LINE認証</h1>
   <div id="profile" style="display: none;">
     <p>ニックネーム: <span id="displayName"></span></p>
     <p>LINE ID: <span id="userId"></span></p>
@@ -20,7 +19,7 @@
 
   <script>
     /**
-     * LIFF を初期化し、ログイン状態に応じて処理を切り替えます。
+     * LIFF を初期化し、未ログイン時は自動的にログインへリダイレクトします。
      * @param {string} myLiffId - あなたのLIFF ID
      */
     async function initializeLiff(myLiffId) {
@@ -32,11 +31,10 @@
       }
 
       if (!liff.isLoggedIn()) {
-        document.getElementById('loginButton').addEventListener('click', () => {
-          liff.login();
-        });
+        // 未ログイン時、自動でログイン画面にリダイレクト
+        liff.login();
       } else {
-        document.getElementById('loginButton').style.display = 'none';
+        // ログイン済みならプロフィールを表示
         displayProfile();
       }
     }
@@ -56,7 +54,6 @@
     }
 
     window.onload = () => {
-      // ここに YOUR_LIFF_ID を設定してください
       const myLiffId = '2007351696-l575vJGn';
       initializeLiff(myLiffId);
     };
