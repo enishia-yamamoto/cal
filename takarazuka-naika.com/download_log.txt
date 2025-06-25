@@ -1,0 +1,63 @@
+ダウンロード開始：2025/06/26 木 5:07:13
+
+● https://takarazuka-naika.com から C:\Users\root\Downloads\takarazuka-naika.com へ
+
+index.html （"[default]" から変更）
+annai.html
+visit.html
+rinen.html
+kodawari.html
+
+● https://takarazuka-naika.com/images から C:\Users\root\Downloads\takarazuka-naika.com\images へ
+
+yoyaku-line-sp.png
+yoyaku-line-pc2.png
+yoyaku-line-none-sp.png
+yoyaku-line-none-pc.png
+time2.jpg
+time.jpg
+tel.jpg
+rinen.png
+map.jpg
+manga-kensa.jpg
+manga-innchou.jpg
+manga-daicho-color.jpg
+logo033.png
+logo03.png
+logo022.png
+logo02.png
+logo011.png
+logo01.png
+logo.png
+incho-rinen.jpg
+incho.png
+img-rinen03.jpg
+img-rinen02.jpg
+img-kodawari05.jpg
+img-kodawari04.jpg
+img-kodawari03.jpg
+img-kodawari02.jpg
+img-kodawari01.jpg
+favicon.png
+facebook.png
+down.png
+bgSec04sp.jpg
+bgSec04.jpg
+bannar-telsp-bottom1.png
+bannar-insta.png
+annai-02.jpg
+annai-01.jpg
+
+● https://takarazuka-naika.com/js から C:\Users\root\Downloads\takarazuka-naika.com\js へ
+
+script.js
+
+● https://takarazuka-naika.com/css から C:\Users\root\Downloads\takarazuka-naika.com\css へ
+
+style.css
+
+ダウンロード完了：2025/06/26 木 5:07:18
+
+ダウンロード予定数：44
+ダウンロード総数：44
+エラーはありませんでした。
