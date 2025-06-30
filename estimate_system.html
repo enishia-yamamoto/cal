@@ -7,125 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <title>見積システム - 柴田光亮税理士事務所</title>
     <style>
-        /* CSSスタイルは変更なしのため、省略します */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; padding: 10px; margin: 0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; border: 2px solid #333; padding: 15px; }
-        @media (max-width: 768px) { body { padding: 5px; } .container { padding: 10px; border: 1px solid #333; } }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        .logo-section { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; padding: 20px; }
-        .logo-img { width: 100%; max-width: 600px; height: auto; flex-shrink: 0; }
-        .company-info { text-align: left; }
-        .company-info h2 { font-size: 32px; margin-bottom: 10px; }
-        .company-info h3 { font-size: 24px; color: #333; }
-        @media (max-width: 768px) { .logo-section { flex-direction: column; text-align: center; padding: 15px; } .logo-img { width: 100%; max-width: 400px; height: auto; } .company-info { text-align: center; } .company-info h2 { font-size: 24px; } .company-info h3 { font-size: 18px; } }
-        .info-banner { background: #2c3e50; color: white; text-align: center; padding: 15px; margin: 20px 0; font-size: 16px; }
-        @media (max-width: 768px) { .info-banner { font-size: 14px; padding: 12px; } }
-        .form-section { background: #f0f0f0; padding: 20px; margin: 20px 0; border: 1px solid #ddd; }
-        .form-row { margin-bottom: 15px; display: flex; align-items: center; flex-wrap: wrap; }
-        .form-row label { font-weight: bold; margin-bottom: 5px; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .required { color: red; margin-left: 10px; }
-        .radio-group { display: flex; flex-direction: column; gap: 8px; margin-left: 20px; font-size: 16px; font-weight: normal; }
-        input[type="text"], input[type="number"] { padding: 8px; border: 1px solid #ccc; width: 300px; max-width: 100%; border-radius: 15px; font-size: 18px; margin-left: 20px; }
-        .example-text { color: #666; font-size: 18px; margin-left: 30px; }
-        @media (max-width: 768px) { .form-row { flex-direction: column; align-items: flex-start; } .form-row label { width: 100%; margin-bottom: 8px; font-size: 14px; white-space: normal; overflow: visible; text-overflow: unset; } .radio-group { gap: 8px; margin-top: 10px; margin-left: 15px; } input[type="text"], input[type="number"] { width: auto; flex: 1; margin-left: 15px; } .example-text { margin-left: 15px; margin-top: 5px; font-size: 16px; } .required { margin-left: 5px; } }
-        .note-box { background: #999; color: white; padding: 15px; margin: 20px 0; border-radius: 5px; }
-        @media (max-width: 768px) { .note-box { padding: 12px; font-size: 14px; } }
-        .submit-btn { background: #2c3e50; color: white; padding: 15px 30px; border: none; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; }
-        .result-section { background: #f8f8f8; padding: 20px; margin: 20px 0; border: 1px solid #ddd; display: none; }
-        .result-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: white; border: 1px solid #ccc; flex-wrap: wrap; }
-        .result-label { font-weight: bold; width: 320px; margin-bottom: 5px; font-size: 16px; }
-        .result-value { font-size: 18px; font-weight: bold; text-align: right; min-width: 150px; }
-        .approx-placeholder { display: inline-block; width: 1em; }
-        @media (max-width: 768px) { .result-row { flex-direction: column; align-items: flex-start; padding: 15px 10px; } .result-label { width: 100%; margin-bottom: 10px; font-size: 14px; white-space: normal; overflow: visible; text-overflow: unset; } .result-value { font-size: 16px; } }
-        .total-section { background: #ecf0f1; padding: 15px; margin: 20px 0; border: 2px solid #2c3e50; }
-        .total-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; font-weight: bold; }
-        .total-amount { text-align: right; font-weight: bold; min-width: 150px; }
-        .line-btn { background: #27ae60; color: white; padding: 15px 30px; border: none; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; }
-        .pricing-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        .pricing-table th, .pricing-table td { border: 1px solid #333; padding: 8px; text-align: center; font-size: 14px; }
-        .pricing-table th { background: #f0f0f0; font-weight: bold; }
-        @media (max-width: 768px) { .pricing-table { font-size: 12px; } .pricing-table th, .pricing-table td { padding: 6px 4px; font-size: 11px; } .pricing-table th { font-size: 12px; } }
-        .pricing-section { margin: 30px 0; }
-        .pricing-header { background: #333; color: white; padding: 10px; text-align: center; font-size: 18px; font-weight: bold; }
-        .add-calc-btn { background: #6c757d; color: white; padding: 10px 20px; border: none; margin: 10px 5px; cursor: pointer; }
+        /* CSSは変更なし */
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; padding: 10px; margin: 0; } .container { max-width: 800px; margin: 0 auto; background: white; border: 2px solid #333; padding: 15px; } @media (max-width: 768px) { body { padding: 5px; } .container { padding: 10px; border: 1px solid #333; } } .header { text-align: center; margin-bottom: 30px; } .header h1 { font-size: 24px; font-weight: bold; margin-bottom: 20px; } .logo-section { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; padding: 20px; } .logo-img { width: 100%; max-width: 600px; height: auto; flex-shrink: 0; } .company-info { text-align: left; } .company-info h2 { font-size: 32px; margin-bottom: 10px; } .company-info h3 { font-size: 24px; color: #333; } @media (max-width: 768px) { .logo-section { flex-direction: column; text-align: center; padding: 15px; } .logo-img { width: 100%; max-width: 400px; height: auto; } .company-info { text-align: center; } .company-info h2 { font-size: 24px; } .company-info h3 { font-size: 18px; } } .info-banner { background: #2c3e50; color: white; text-align: center; padding: 15px; margin: 20px 0; font-size: 16px; } @media (max-width: 768px) { .info-banner { font-size: 14px; padding: 12px; } } .form-section { background: #f0f0f0; padding: 20px; margin: 20px 0; border: 1px solid #ddd; } .form-row { margin-bottom: 15px; display: flex; align-items: center; flex-wrap: wrap; } .form-row label { font-weight: bold; margin-bottom: 5px; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .required { color: red; margin-left: 10px; } .radio-group { display: flex; flex-direction: column; gap: 8px; margin-left: 20px; font-size: 16px; font-weight: normal; } input[type="text"], input[type="number"] { padding: 8px; border: 1px solid #ccc; width: 300px; max-width: 100%; border-radius: 15px; font-size: 18px; margin-left: 20px; } .example-text { color: #666; font-size: 18px; margin-left: 30px; } @media (max-width: 768px) { .form-row { flex-direction: column; align-items: flex-start; } .form-row label { width: 100%; margin-bottom: 8px; font-size: 14px; white-space: normal; overflow: visible; text-overflow: unset; } .radio-group { gap: 8px; margin-top: 10px; margin-left: 15px; } input[type="text"], input[type="number"] { width: auto; flex: 1; margin-left: 15px; } .example-text { margin-left: 15px; margin-top: 5px; font-size: 16px; } .required { margin-left: 5px; } } .note-box { background: #999; color: white; padding: 15px; margin: 20px 0; border-radius: 5px; } @media (max-width: 768px) { .note-box { padding: 12px; font-size: 14px; } } .submit-btn { background: #2c3e50; color: white; padding: 15px 30px; border: none; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; } .result-section { background: #f8f8f8; padding: 20px; margin: 20px 0; border: 1px solid #ddd; display: none; } .result-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: white; border: 1px solid #ccc; flex-wrap: wrap; } .result-label { font-weight: bold; width: 320px; margin-bottom: 5px; font-size: 16px; } .result-value { font-size: 18px; font-weight: bold; text-align: right; min-width: 150px; } .approx-placeholder { display: inline-block; width: 1em; } @media (max-width: 768px) { .result-row { flex-direction: column; align-items: flex-start; padding: 15px 10px; } .result-label { width: 100%; margin-bottom: 10px; font-size: 14px; white-space: normal; overflow: visible; text-overflow: unset; } .result-value { font-size: 16px; } } .total-section { background: #ecf0f1; padding: 15px; margin: 20px 0; border: 2px solid #2c3e50; } .total-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; font-weight: bold; } .total-amount { text-align: right; font-weight: bold; min-width: 150px; } .line-btn { background: #27ae60; color: white; padding: 15px 30px; border: none; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HTMLのフォーム部分は変更なしのため、省略します -->
-        <div class="logo-section"> <img src="logo.png" alt="柴田光亮税理士事務所" class="logo-img"> </div>
-        <div class="info-banner"> ご入力後すぐにお見積りをご案内できます<br> （入力目安時間：約30秒） </div>
-        <p style="text-align: center; margin: 20px 0;"> システム上の仕様により、回答をアンケートでご提出いただく項目が<br> ございますが、ご入力のご協力をお願いいたします。<br> </p>
-        <form id="estimateForm">
-            <div class="form-section">
-                <div class="form-row"> <label>1.法人・個人事業主 <span class="required">必須</span></label> </div>
-                <div class="form-row">
-                    <div class="radio-group"> <label><input type="radio" name="businessType" value="法人" required> 法人</label> <label><input type="radio" name="businessType" value="個人事業"> 個人事業</label> </div>
-                </div>
-                <div class="form-row"> <label>2.会社名（個人事業主の方は屋号またはお名前をご入力ください） <span class="required">必須</span></label> </div>
-                <div class="form-row"> <input type="text" id="companyName" name="companyName" required> <span class="example-text">例：株式会社○○/山田 太郎（個人事業主）</span> </div>
-                <div class="form-row"> <label>3.従業員数 <span class="required">必須</span></label> <span style="margin-left: 20px;">半角でご入力ください</span> </div>
-                <div class="form-row">
-                    <div style="display: flex; align-items: center; gap: 5px;"> <input type="number" id="employeeCount" name="employeeCount" required> <span>人</span> </div>
-                </div>
-                <div class="form-row"> <label>4.年間売上</label> <span style="margin-left: 20px;">半角でご入力ください</span> </div>
-                <div class="form-row">
-                    <div style="display: flex; align-items: center; gap: 5px;"> <input type="number" id="annualSales" name="annualSales"> <span>円</span> </div>
-                </div>
-                <div class="form-row"> <label>5.記帳依頼の有無 <span class="required">必須</span></label> </div>
-                <div class="form-row">
-                    <div class="radio-group"> <label><input type="radio" name="bookkeeping" value="する" required> 記帳依頼する</label> <label><input type="radio" name="bookkeeping" value="しない"> 記帳依頼しない</label> </div>
-                </div>
-                <div class="form-row"> <label>6.年末調整及び法定調書等の作成 <span class="required">必須</span></label> </div>
-                <div class="form-row">
-                    <div class="radio-group"> <label><input type="radio" name="yearEnd" value="依頼する" required> 作成依頼する</label> <label><input type="radio" name="yearEnd" value="依頼しない"> 作成依頼しない</label> </div>
-                </div>
-                <div class="form-row"> <label>7.法定調書作成(個人事業主で従業員がいない場合のみ選択下さい) <span style="color: red;">任意</span></label> </div>
-                <div class="form-row">
-                    <div class="radio-group"> <label><input type="radio" name="legalDoc" value="依頼する"> 作成依頼する</label> <label><input type="radio" name="legalDoc" value="依頼しない"> 作成依頼しない</label> </div>
-                </div>
-                <div class="form-row"> <label>8.給与計算業務 <span class="required">必須</span></label> </div>
-                <div class="form-row">
-                    <div class="radio-group"> <label><input type="radio" name="payroll" value="依頼する" required> 依頼する</label> <label><input type="radio" name="payroll" value="依頼しない"> 依頼しない</label> </div>
-                </div>
-            </div>
-            <button type="submit" class="submit-btn">回答する</button>
-        </form>
+        <!-- HTMLのフォーム部分は変更なし -->
+        <div class="logo-section"> <img src="logo.png" alt="柴田光亮税理士事務所" class="logo-img"> </div> <div class="info-banner"> ご入力後すぐにお見積りをご案内できます<br> （入力目安時間：約30秒） </div> <p style="text-align: center; margin: 20px 0;"> システム上の仕様により、回答をアンケートでご提出いただく項目が<br> ございますが、ご入力のご協力をお願いいたします。<br> </p> <form id="estimateForm"> <div class="form-section"> <div class="form-row"> <label>1.法人・個人事業主 <span class="required">必須</span></label> </div> <div class="form-row"> <div class="radio-group"> <label><input type="radio" name="businessType" value="法人" required> 法人</label> <label><input type="radio" name="businessType" value="個人事業"> 個人事業</label> </div> </div> <div class="form-row"> <label>2.会社名（個人事業主の方は屋号またはお名前をご入力ください） <span class="required">必須</span></label> </div> <div class="form-row"> <input type="text" id="companyName" name="companyName" required> <span class="example-text">例：株式会社○○/山田 太郎（個人事業主）</span> </div> <div class="form-row"> <label>3.従業員数 <span class="required">必須</span></label> <span style="margin-left: 20px;">半角でご入力ください</span> </div> <div class="form-row"> <div style="display: flex; align-items: center; gap: 5px;"> <input type="number" id="employeeCount" name="employeeCount" required> <span>人</span> </div> </div> <div class="form-row"> <label>4.年間売上</label> <span style="margin-left: 20px;">半角でご入力ください</span> </div> <div class="form-row"> <div style="display: flex; align-items: center; gap: 5px;"> <input type="number" id="annualSales" name="annualSales"> <span>円</span> </div> </div> <div class="form-row"> <label>5.記帳依頼の有無 <span class="required">必須</span></label> </div> <div class="form-row"> <div class="radio-group"> <label><input type="radio" name="bookkeeping" value="する" required> 記帳依頼する</label> <label><input type="radio" name="bookkeeping" value="しない"> 記帳依頼しない</label> </div> </div> <div class="form-row"> <label>6.年末調整及び法定調書等の作成 <span class="required">必須</span></label> </div> <div class="form-row"> <div class="radio-group"> <label><input type="radio" name="yearEnd" value="依頼する" required> 作成依頼する</label> <label><input type="radio" name="yearEnd" value="依頼しない"> 作成依頼しない</label> </div> </div> <div class="form-row"> <label>7.法定調書作成(個人事業主で従業員がいない場合のみ選択下さい) <span style="color: red;">任意</span></label> </div> <div class="form-row"> <div class="radio-group"> <label><input type="radio" name="legalDoc" value="依頼する"> 作成依頼する</label> <label><input type="radio" name="legalDoc" value="依頼しない"> 作成依頼しない</label> </div> </div> <div class="form-row"> <label>8.給与計算業務 <span class="required">必須</span></label> </div> <div class="form-row"> <div class="radio-group"> <label><input type="radio" name="payroll" value="依頼する" required> 依頼する</label> <label><input type="radio" name="payroll" value="依頼しない"> 依頼しない</label> </div> </div> </div> <button type="submit" class="submit-btn">回答する</button> </form>
         <div id="resultSection" class="result-section">
-            <div class="result-row">
-                <div class="result-label">①月額報酬額</div>
-                <div class="result-value"><span id="monthlyFee">-</span> 円<span id="monthlyFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
-            <div class="result-row">
-                <div class="result-label">②記帳代行料金（月額）</div>
-                <div class="result-value"><span id="bookkeepingFee">-</span> 円<span id="bookkeepingFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
-            <div class="result-row">
-                <div class="result-label">③給与計算業務</div>
-                <div class="result-value"><span id="payrollFee">-</span> 円<span id="payrollFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
-            <div style="font-size: 12px; color: #666; margin: 10px 0;"> ※基本料金1万円＋社員数×1,000円<br> （社員数1名～可能、初期登録費用なし） </div>
-            <div class="result-row">
-                <div class="result-label">④決算申告報酬</div>
-                <div class="result-value"><span id="taxReturnFee">-</span> 円<span id="taxReturnFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
-            <div style="font-size: 12px; color: #666; margin: 10px 0;"> ※年1回の発生、報酬月額の5か月分になります。 </div>
-            <div class="result-row">
-                <div class="result-label">⑤年末調整及び法定調書等の作成</div>
-                <div class="result-value"><span id="yearEndFee">-</span> 円<span id="yearEndFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
-            <div class="result-row">
-                <div class="result-label">⑥法定調書作成(個人事業主・従業員なし)</div>
-                <div class="result-value"><span id="legalDocFee">-</span> 円<span id="legalDocFeeApprox" class="approx-placeholder"></span>（税別）</div>
-            </div>
+             <div class="result-row"> <div class="result-label">①月額報酬額</div> <div class="result-value"><span id="monthlyFee">-</span> 円<span id="monthlyFeeApprox" class="approx-placeholder"></span>（税別）</div> </div> <div class="result-row"> <div class="result-label">②記帳代行料金（月額）</div> <div class="result-value"><span id="bookkeepingFee">-</span> 円<span id="bookkeepingFeeApprox" class="approx-placeholder"></span>（税別）</div> </div> <div class="result-row"> <div class="result-label">③給与計算業務</div> <div class="result-value"><span id="payrollFee">-</span> 円<span id="payrollFeeApprox" class="approx-placeholder"></span>（税別）</div> </div> <div style="font-size: 12px; color: #666; margin: 10px 0;"> ※基本料金1万円＋社員数×1,000円<br> （社員数1名～可能、初期登録費用なし） </div> <div class="result-row"> <div class="result-label">④決算申告報酬</div> <div class="result-value"><span id="taxReturnFee">-</span> 円<span id="taxReturnFeeApprox" class="approx-placeholder"></span>（税別）</div> </div> <div style="font-size: 12px; color: #666; margin: 10px 0;"> ※年1回の発生、報酬月額の5か月分になります。 </div> <div class="result-row"> <div class="result-label">⑤年末調整及び法定調書等の作成</div> <div class="result-value"><span id="yearEndFee">-</span> 円<span id="yearEndFeeApprox" class="approx-placeholder"></span>（税別）</div> </div> <div class="result-row"> <div class="result-label">⑥法定調書作成(個人事業主・従業員なし)</div> <div class="result-value"><span id="legalDocFee">-</span> 円<span id="legalDocFeeApprox" class="approx-placeholder"></span>（税別）</div> </div>
             <div class="total-section">
                 <h3 style="text-align: center; margin-bottom: 15px;">合計金額</h3>
-                <div class="total-row"> <span>▶月額合計金額</span> <span class="total-amount"><span id="monthlyTotal">-</span> 円<span id="monthlyTotalApprox" class="approx-placeholder"></span>（税別）</span> </div>
-                <div style="font-size: 12px; color: #666; margin-bottom: 10px;"> ※①＋②＋③の月額合計額 </div>
-                <div class="total-row"> <span>▶年間合計金額</span> <span class="total-amount"><span id="annualTotal">-</span> 円<span id="annualTotalApprox" class="approx-placeholder"></span>（税別）</span> </div>
-                <div style="font-size: 12px; color: #666;"> (①＋②＋③) ×12か月分＋④＋⑤＋⑥ </div>
+                <div class="total-row"> <span>▶月額合計金額</span> <span class="total-amount"><span id="monthlyTotal">-</span> 円<span id="monthlyTotalApprox" class="approx-placeholder"></span>（税別）</span> </div> <div style="font-size: 12px; color: #666; margin-bottom: 10px;"> ※①＋②＋③の月額合計額 </div> <div class="total-row"> <span>▶年間合計金額</span> <span class="total-amount"><span id="annualTotal">-</span> 円<span id="annualTotalApprox" class="approx-placeholder"></span>（税別）</span> </div> <div style="font-size: 12px; color: #666;"> (①＋②＋③) ×12か月分＋④＋⑤＋⑥ </div>
             </div>
             <p style="text-align: center; margin: 20px 0;"> ※金額の末尾に「〜」と記載のある場合は、恐れ入りますが改めてお見積りをさせて頂きます。 </p>
             <button type="button" class="line-btn">LINEに戻る</button>
@@ -134,7 +28,6 @@
 
     <script>
         // --- 設定項目 ---
-        // Googleスプレッドシートから取得した公開URL
         const URLS = {
             houjin: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT0sWHqR2-YBvXZDAJhhUuFnJsgI1k8shY71c2_rd_k2oinPu222J8BoTPFFo2rOYM1XOcI_sI_vwOn/pub?gid=0&single=true&output=csv',
             kojin: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT0sWHqR2-YBvXZDAJhhUuFnJsgI1k8shY71c2_rd_k2oinPu222J8BoTPFFo2rOYM1XOcI_sI_vwOn/pub?gid=1827628289&single=true&output=csv',
@@ -142,20 +35,14 @@
         };
 
         // --- プログラム本体 ---
-
-        // CSVデータを非同期で取得・解析する関数
         function fetchAndParseCsv(url) {
             return new Promise((resolve, reject) => {
                 Papa.parse(url, {
-                    download: true,
-                    header: true,
-                    skipEmptyLines: true,
+                    download: true, header: true, skipEmptyLines: true,
                     complete: (results) => {
                         const data = results.data.map(row => {
                             for (const key in row) {
-                                if (!isNaN(row[key]) && row[key] !== '') {
-                                    row[key] = Number(row[key]);
-                                }
+                                if (!isNaN(row[key]) && row[key] !== '') { row[key] = Number(row[key]); }
                             }
                             return row;
                         });
@@ -166,33 +53,21 @@
             });
         }
 
-        // フォーム送信時の処理
         document.getElementById('estimateForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const submitButton = e.target.querySelector('.submit-btn');
             submitButton.textContent = '計算中...';
             submitButton.disabled = true;
-
             try {
                 const [houjinData, kojinData, commonDataRaw] = await Promise.all([
-                    fetchAndParseCsv(URLS.houjin),
-                    fetchAndParseCsv(URLS.kojin),
-                    fetchAndParseCsv(URLS.common)
+                    fetchAndParseCsv(URLS.houjin), fetchAndParseCsv(URLS.kojin), fetchAndParseCsv(URLS.common)
                 ]);
-
                 const commonConfig = commonDataRaw.reduce((obj, item) => {
                     obj[item.設定項目] = item.金額;
                     return obj;
                 }, {});
-
-                const pricingData = {
-                    '法人': houjinData,
-                    '個人事業': kojinData,
-                    '共通設定': commonConfig
-                };
-
+                const pricingData = { '法人': houjinData, '個人事業': kojinData, '共通設定': commonConfig };
                 calculateEstimate(pricingData);
-
             } catch (error) {
                 console.error(error);
                 alert('料金データの読み込みに失敗しました。時間をおいて再度お試しいただくか、管理者にご連絡ください。');
@@ -202,23 +77,14 @@
             }
         });
 
-        // 売上に応じて料金を取得するヘルパー関数
         function getFeeBySales(sales, feeTable, feeType, isIndividualEstimate) {
             if (!feeTable || feeTable.length === 0) return { fee: 0, isIndividualEstimate };
-
             for (const range of feeTable) {
-                if (sales <= range.売上上限) {
-                    return { fee: range[feeType], isIndividualEstimate };
-                }
+                if (sales <= range.売上上限) { return { fee: range[feeType], isIndividualEstimate }; }
             }
-            // 料金表の上限を超えた場合
-            return {
-                fee: feeTable[feeTable.length - 1][feeType],
-                isIndividualEstimate: true
-            };
+            return { fee: feeTable[feeTable.length - 1][feeType], isIndividualEstimate: true };
         }
 
-        // 見積もりを計算し、結果を表示する関数
         function calculateEstimate(pricingData) {
             const formData = new FormData(document.getElementById('estimateForm'));
             const businessType = formData.get('businessType');
@@ -233,12 +99,10 @@
             const commonConfig = pricingData['共通設定'];
             let isIndividualEstimate = false;
 
-            // ①月額報酬額
             let monthlyResult = getFeeBySales(annualSales, config, '月額報酬額', isIndividualEstimate);
             let monthlyFee = monthlyResult.fee;
             isIndividualEstimate = monthlyResult.isIndividualEstimate;
 
-            // ②記帳代行料金
             let bookkeepingFee = 0;
             if (bookkeeping === 'する') {
                 let bookkeepingResult = getFeeBySales(annualSales, config, '記帳代行料金', isIndividualEstimate);
@@ -246,30 +110,32 @@
                 isIndividualEstimate = bookkeepingResult.isIndividualEstimate;
             }
 
-            // ③給与計算業務
             let payrollFee = 0;
             if (payroll === '依頼する') {
                 payrollFee = commonConfig.給与計算基本料金 + (employeeCount * commonConfig.給与計算社員単価);
             }
 
-            // ④決算申告報酬
             const minTaxReturn = (businessType === '法人') ? commonConfig.法人決算申告報酬最低額 : commonConfig.個人決算申告報酬最低額;
             let taxReturnFee = Math.max(monthlyFee * 5, minTaxReturn);
 
-            // ⑤年末調整
+            // ▼▼▼ 年末調整の計算ロジックを修正 ▼▼▼
             let yearEndFee = 0;
             if (yearEnd === '依頼する' && employeeCount > 0) {
-                yearEndFee = commonConfig.年末調整基本料金 + (employeeCount * commonConfig.年末調整社員単価);
+                // まず基本料金を設定
+                yearEndFee = commonConfig.年末調整基本料金;
+                // 従業員が5名を超えている場合、超過分を追加
+                if (employeeCount > 5) {
+                    yearEndFee += (employeeCount - 5) * commonConfig.年末調整社員単価;
+                }
             }
             const yearEndFeeHasApprox = (yearEnd === '依頼する' && employeeCount > 5);
+            // ▲▲▲ 修正ここまで ▲▲▲
 
-            // ⑥法定調書作成
             let legalDocFee = 0;
             if (legalDoc === '依頼する' && businessType === '個人事業' && employeeCount === 0) {
                 legalDocFee = commonConfig.法定調書作成料金;
             }
 
-            // --- 結果の表示 ---
             const customerTypeText = businessType === '法人' ? '法人のお客様' : '個人事業主のお客様';
             let resultHeader = document.getElementById('resultHeader');
             if (!resultHeader) {
@@ -288,19 +154,14 @@
 
             document.getElementById('monthlyFee').textContent = monthlyFee.toLocaleString();
             document.getElementById('monthlyFeeApprox').textContent = (businessType === '法人' || isIndividualEstimate) ? approxSymbol : '';
-
             document.getElementById('bookkeepingFee').textContent = bookkeepingFee.toLocaleString();
             document.getElementById('bookkeepingFeeApprox').textContent = (bookkeeping === 'する' && (businessType === '法人' || isIndividualEstimate)) ? approxSymbol : '';
-
             document.getElementById('payrollFee').textContent = payrollFee.toLocaleString();
             document.getElementById('payrollFeeApprox').textContent = '';
-
             document.getElementById('taxReturnFee').textContent = taxReturnFee.toLocaleString();
             document.getElementById('taxReturnFeeApprox').textContent = (businessType === '法人' || isIndividualEstimate) ? approxSymbol : '';
-
             document.getElementById('yearEndFee').textContent = yearEndFee.toLocaleString();
             document.getElementById('yearEndFeeApprox').textContent = yearEndFeeHasApprox ? approxSymbol : '';
-
             document.getElementById('legalDocFee').textContent = legalDocFee.toLocaleString();
             document.getElementById('legalDocFeeApprox').textContent = '';
 
